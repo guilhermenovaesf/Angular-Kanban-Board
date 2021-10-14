@@ -1,131 +1,123 @@
 <div class="root">
   <div class="navbar has-background-dark">
-    <div class="navbar-brand">
-
-    </div>
+    <div class="navbar-brand"></div>
+  </div>
+  <div class="add">
+    <button mat-flat-button color="primary" (click)="openDialogAct(null)">
+      Adicionar card
+    </button>
   </div>
   <div class="board">
+    <div class="board-wrapper">
+      <div cdkDropListGroup>
+        <div class="example-container">
+          <h2>Sprint</h2>
 
-    <button  mat-flat-button color="primary" (click)="openDialogAct(null)">Adicionar card</button>
-    <div class="board-wrapper" >
-
-
-           <div cdkDropListGroup>
-            <div class="example-container">
-              <h2>Sprint</h2>
-
-              <div
-                cdkDropList
-                [cdkDropListData]="sprint"
-                class="example-list"
-                cdkDropListSortingDisabled
-                (cdkDropListDropped)="drop($event)">
-
-                <div class="example-box" *ngFor="let item of sprint" cdkDrag  >
-                  <mat-card (click)="openDialog(item)">
-                  <mat-card-title-group>
-                    <mat-card-title> {{item.titulo}}</mat-card-title>
-                    <mat-card-subtitle> {{item.pessoa}}</mat-card-subtitle>
-
-                  </mat-card-title-group>
-                  <mat-card-content>
-                    {{item.conteudo}}
-                  </mat-card-content>
-                  <mat-card-content>
-                    {{item.prazo}}
-                  </mat-card-content>
-                </mat-card>
-<mat-card-actions class="botoes" align="end">
-              <button mat-icon-button (click)="editCard(item)">
-                <mat-icon >edit</mat-icon>
-              </button>
-              <button mat-icon-button (click)="deleteCard(item)">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </mat-card-actions>
-                </div>
-              </div>
-            </div>
-
-            <div class="example-container">
-              <h2>To Do</h2>
-
-              <div
-                cdkDropList
-                [cdkDropListData]="todo"
-                class="example-list"
-                cdkDropListSortingDisabled
-                (cdkDropListDropped)="drop($event)">
-                <div class="example-box" *ngFor="let item of todo" cdkDrag>
-                  <mat-card (click)="openDialog(item)">
-                  <mat-card-title-group>
-                    <mat-card-title> {{item.titulo}}</mat-card-title>
-                    <mat-card-subtitle> {{item.pessoa}}</mat-card-subtitle>
-
-                  </mat-card-title-group>
-                  <mat-card-content>
-                    {{item.conteudo}}
-                  </mat-card-content>
-                  <mat-card-content>
-                    {{item.prazo}}
-                  </mat-card-content>
-                </mat-card>
-                <mat-card-actions class="botoes" align="end">
-                  <button mat-icon-button (click)="editCard(item)">
-                    <mat-icon >edit</mat-icon>
-                  </button>
-                  <button mat-icon-button (click)="deleteCard(item)">
-                    <mat-icon>delete</mat-icon>
-                  </button>
-                </mat-card-actions>
-                </div>
-              </div>
-            </div>
-            <div class="example-container">
-              <h2>Done</h2>
-
-              <div
-                cdkDropList
-                [cdkDropListData]="done"
-                class="example-list"
-                cdkDropListSortingDisabled
-                (cdkDropListDropped)="drop($event)">
-                <div class="example-box" *ngFor="let item of done" cdkDrag>
-                  <mat-card (click)="openDialog(item)">
-                  <mat-card-title-group>
-                    <mat-card-title> {{item.titulo}}</mat-card-title>
-                    <mat-card-subtitle> {{item.pessoa}}</mat-card-subtitle>
-
-                  </mat-card-title-group>
-                  <mat-card-content>
-                    {{item.conteudo}}
-
-                  </mat-card-content>
-                  <mat-card-content>
-                    {{item.prazo}}
-                  </mat-card-content>
-                </mat-card>
-                <mat-card-actions class="botoes" align="end">
-                  <button mat-icon-button (click)="editCard(item)">
-                    <mat-icon >edit</mat-icon>
-                  </button>
-                  <button mat-icon-button (click)="deleteCard(item)">
-                    <mat-icon>delete</mat-icon>
-                  </button>
-                </mat-card-actions>
-                </div>
-              </div>
+          <div
+            cdkDropList
+            [cdkDropListData]="cardsComponent"
+            class="example-list"
+            cdkDropListSortingDisabled
+            (cdkDropListDropped)="drop($event)"
+          >
+            <div
+              class="example-box"
+              *ngFor="let item of cardsComponent"
+              cdkDrag
+            >
+              <mat-card (click)="openDialog(item)">
+                <mat-card-title-group>
+                  <mat-card-title> {{ item.titulo }}</mat-card-title>
+                  <mat-card-subtitle> {{ item.pessoa }}</mat-card-subtitle>
+                </mat-card-title-group>
+                <mat-card-content>
+                  {{ item.conteudo }}
+                </mat-card-content>
+                <mat-card-content>
+                  {{ item.prazo}}
+                </mat-card-content>
+              </mat-card>
+              <mat-card-actions class="botoes" align="end">
+                <button mat-icon-button (click)="editCard(item)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button (click)="deleteCard(item.id)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </mat-card-actions>
             </div>
           </div>
+        </div>
 
-          
+        <div class="example-container">
+          <h2>To Do</h2>
 
-</div>
+          <div
+            cdkDropList
+            [cdkDropListData]="todo"
+            class="example-list"
+            cdkDropListSortingDisabled
+            (cdkDropListDropped)="drop($event)"
+          >
+            <div class="example-box" *ngFor="let item of todo" cdkDrag>
+              <mat-card (click)="openDialog(item)">
+                <mat-card-title-group>
+                  <mat-card-title> {{ item.titulo }}</mat-card-title>
+                  <mat-card-subtitle> {{ item.pessoa }}</mat-card-subtitle>
+                </mat-card-title-group>
+                <mat-card-content>
+                  {{ item.conteudo }}
+                </mat-card-content>
+                <mat-card-content>
+                  {{ item.prazo}}
+                </mat-card-content>
+              </mat-card>
+              <mat-card-actions class="botoes" align="end">
+                <button mat-icon-button (click)="editCard(item)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button (click)="deleteCard(item.id)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </mat-card-actions>
+            </div>
+          </div>
+        </div>
+        <div class="example-container">
+          <h2>Done</h2>
+
+          <div
+            cdkDropList
+            [cdkDropListData]="done"
+            class="example-list"
+            cdkDropListSortingDisabled
+            (cdkDropListDropped)="drop($event)"
+          >
+            <div class="example-box" *ngFor="let item of done" cdkDrag>
+              <mat-card (click)="openDialog(item)">
+                <mat-card-title-group>
+                  <mat-card-title> {{ item.titulo }}</mat-card-title>
+                  <mat-card-subtitle> {{ item.pessoa }}</mat-card-subtitle>
+                </mat-card-title-group>
+                <mat-card-content>
+                  {{ item.conteudo }}
+                </mat-card-content>
+                <mat-card-content>
+                  {{ item.prazo }}
+                </mat-card-content>
+              </mat-card>
+              <mat-card-actions class="botoes" align="end">
+                <button mat-icon-button (click)="editCard(item)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button (click)="deleteCard(item.id)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </mat-card-actions>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-
 </div>
-
-
-
-
-

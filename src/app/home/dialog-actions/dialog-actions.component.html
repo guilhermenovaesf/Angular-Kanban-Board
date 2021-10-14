@@ -1,27 +1,42 @@
 <h1 mat-dialog-title *ngIf="!isChange">Create Card</h1>
 <h1 mat-dialog-title *ngIf="isChange">Edit Card</h1>
 <div mat-dialog-content>
-
   <mat-form-field appearance="fill">
     <mat-label>Titulo</mat-label>
-    <input matInput [(ngModel)]="data.titulo">
+    <input matInput [(ngModel)]="data.titulo" />
   </mat-form-field>
   <mat-form-field appearance="fill">
     <mat-label>Pessoa</mat-label>
-    <input matInput [(ngModel)]="data.pessoa">
+    <mat-select matNativeControl required matInput [(ngModel)]="data.pessoa">
+      <mat-option value="Gabriel">Gabriel</mat-option>
+      <mat-option value="Breno">Breno</mat-option>
+      <mat-option value="Arthur">Arthur</mat-option>
+      <mat-option value="Lucas">Lucas</mat-option>
+      <mat-option value="Pacífico">Pacífico</mat-option>
+    </mat-select>
   </mat-form-field>
   <mat-form-field appearance="fill">
-    <mat-label>Descriçao</mat-label>
-    <input matInput [(ngModel)]="data.conteudo">
+    <mat-label>Descrição</mat-label>
+    <input matInput [(ngModel)]="data.conteudo" />
   </mat-form-field>
-  <mat-form-field appearance="fill">
-    <mat-label>Prazo(em formato dd/mm/aa)</mat-label>
-    <input matInput [(ngModel)]="data.prazo">
+  <mat-form-field appearance="fill" class="date">
+    <mat-label>Data de Conclusão</mat-label>
+    <input matInput [matDatepicker]="picker" [(ngModel)]="data.prazo" />
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
-
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="onCancel()">cancel</button>
-  <button mat-button *ngIf="!isChange" [mat-dialog-close]="data"  cdkFocusInitial>Create</button>
-
+  <button mat-button *ngIf="isChange" [mat-dialog-close]="data" cdkFocusInitial>
+    Editar
+  </button>
+  <button
+    mat-button
+    *ngIf="!isChange"
+    [mat-dialog-close]="data"
+    cdkFocusInitial
+  >
+    Create
+  </button>
 </div>

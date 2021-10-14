@@ -1,125 +1,142 @@
 import { FuncoesService } from './../../service/funcoes.service';
-import { MatDialog, MatDialogConfig, MAT_DIALOG_DATA,MatDialogRef  } from '@angular/material/dialog';
+import {
+  MatDialog,
+  MatDialogConfig,
+  MAT_DIALOG_DATA,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { DialogElementsExampleDialog } from './../dialog-card/dialog-card.component';
 import { TarefaModule } from './../../models/tarefa/tarefa.module';
-import { ColunasModule } from './../../models/colunas/colunas.module';
-import { QuadroModule } from './../../models/quadro/quadro.module';
-import {Component, Inject, Input, Output, ViewChild} from '@angular/core';
-import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import { Component, Inject, Input, Output, ViewChild } from '@angular/core';
+import {
+  CdkDragDrop,
+  moveItemInArray,
+  transferArrayItem,
+} from '@angular/cdk/drag-drop';
 import { DialogActionsComponent } from '../dialog-actions/dialog-actions.component';
 
 @Component({
   selector: 'app-categorias',
   templateUrl: './categorias.component.html',
-  styleUrls: ['./categorias.component.css']
+  styleUrls: ['./categorias.component.css'],
+  providers: [FuncoesService],
 })
-export class CategoriasComponent  {
+export class CategoriasComponent {
+  todo: TarefaModule[] = [];
+  done: TarefaModule[] = [];
 
-sprint = [
-  {titulo:"titulo aqui",
-  pessoa:"pessoa aqui",
-  conteudo:"descricao aqui",
-prazo:"01/10/2021"
-},
-{titulo:"titulo aqui1",
-pessoa:"pessoa aqui1",
-conteudo:"descricao aqui1",
-prazo:"01/10/2021"
-}
+  cardsComponent: TarefaModule[] = [];
 
-];
-todo = [
-  {titulo:"titulo aqui2",
-  pessoa:"pessoa aqui2",
-  conteudo:"descricao aqui2",
-  prazo:"01/10/2021"
-  },
-  {titulo:"titulo aqui2.1",
-  pessoa:"pessoa aqui2.1",
-  conteudo:"descricao aqui2.1",
-  prazo:"01/10/2021"
+  constructor(public dialog: MatDialog, public cardsService: FuncoesService) {
+    this.cardsService.getListaTarefas().subscribe((data: TarefaModule[]) => {
+      this.cardsComponent = data;
+    });
   }
 
-  ];
-done =[
-  {titulo:"titulo aqui3",
-  pessoa:"pessoa aqui3",
-  conteudo:"descricao aqui3",
-  prazo:"01/10/2021"
-  },
-  {titulo:"titulo aqui3.1",
-  pessoa:"pessoa aqui3.1",
-  conteudo:"descricao aqui3.1",
-  prazo:"01/10/2021"
+  openDialogHelper(cards: object): void {
+    const dialogRef = this.dialog.open(DialogElementsExampleDialog, {
+      width: '450px',
+      data: !cards
+        ? {
+            titulo: '',
+            pessoa: '',
+            conteudo: '',
+            prazo: '',
+          }
+        : cards,
+    });
   }
 
-  ];
-
-
-  constructor(public dialog:MatDialog) {
-
+  openDialog(cards: object): void {
+    this.openDialogHelper(cards);
   }
 
+  openDialogAct(cards: TarefaModule | null): void {
+    const dialogRef = this.dialog.open(DialogActionsComponent, {
+      width: '250px',
+      data: !cards
+        ? {
+            titulo: '',
+            pessoa: '',
+            conteudo: '',
+            prazo: '',
+          }
+        : {
+            id: cards.id,
+            titulo: cards.titulo,
+            pessoa: cards.pessoa,
+            conteudo: cards.conteudo,
+            prazo: cards.prazo,
+          },
+    });
 
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result !== undefined) {
+        if (result.id) {
+          this.cardsService
+            .atualizaTarefa(result)
+            .subscribe((data: TarefaModule) => {
+              const index = this.cardsComponent.findIndex(
+                (p) => p.id == data.id
+              );
+              this.cardsComponent[index] = data;
+              this.cardsService
+                .getListaTarefas()
+                .subscribe((data: TarefaModule[]) => {
+                  this.cardsComponent = data;
+                });
+            });
 
-    openDialogHelper(cards:object): void {
-      const dialogRef = this.dialog.open(DialogElementsExampleDialog, {
-        width: '450px',
-        data:cards===null?{
-          titulo:"",
-          pessoa:"",
-          conteudo:"",
-          prazo:""
-        }:cards
-      });
+        } else {
+          this.cardsService.addTarefas(result).subscribe(() => {
+            this.cardsService
+              .getListaTarefas()
+              .subscribe((data: TarefaModule[]) => {
+                this.cardsComponent = data; //rest spread cardsComponent= {...data}
+              });
+          });
+        }
+      }
+    });
+  }
+
+  editCard(cards: TarefaModule) {
+    this.openDialogAct(cards);
+  }
+
+  deleteCard(cards: number): void {
+    this.cardsService.deletaTarefa(cards).subscribe(() => {
+      this.cardsComponent = this.cardsComponent.filter((p) => p.id !== cards);
+      this.todo = this.todo.filter((p) => p.id !== cards);
+      this.done = this.done.filter((p) => p.id !== cards);
+    });
+  }
+  drop(event: CdkDragDrop<any[]>) {
+    if (event.previousContainer === event.container) { //if para quando eu movo meu card mas coloco no mesmo lugar
+      moveItemInArray(
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex
+      );
+
+    } else { //else para quando o card muda de categoria
+      transferArrayItem(
+        event.previousContainer.data,//retorna os cards que ficaram no lugar onde o card que eu movi saiu
+        event.container.data, //pega qual elemento eu estou mudando de categoria, mas em uma lista, pega mais de um
+        event.previousIndex, //toda mudança de card, me retorna a posição na lista onde esse card estava(ex:se ele estava abaixo de um card, me retona 1)
+        event.currentIndex  //toda mudança de card, me retorna a posição na lista onde esse card foi parar(ex:se coloco abaixo de um card, me retona 1)
+      );
+console.log(event.previousContainer.id)// id da categoria que meu card sai
+console.log(event.container.id) //pega o id da categoria em que meu card é mandado
+
     }
-
-openDialog(cards:object):void{
-this.openDialogHelper(cards)
-}
-
-openDialogAct(cards:object | null): void {
-  const dialogRef = this.dialog.open(DialogActionsComponent, {
-    width: '250px',
-    data:cards===null?{
-      titulo:"",
-      pessoa:"",
-      conteudo:"",
-      prazo:""
-    }:cards
-  });
-
-  dialogRef.afterClosed().subscribe(result => {
-
-   if(result!=undefined){
-    
-     this.sprint.push(result);
-
-   }
-  });
-}
-
-deleteCard(cards:object):void{
- this.sprint=this.sprint.filter(p=>p!==cards)
- this.todo=this.todo.filter(p=>p!==cards)
- this.done=this.done.filter(p=>p!==cards)
-
-}
-
-editCard(cards:object){
-  this.openDialogAct(cards)
-  console.log(cards)
+    let data = event.container.data[0];//pega o card que eu tô mudando, todas as informações
+    data.done = !data.done;
+    this.cardsService.atualizaTarefa(data)
+    .subscribe(res => {
+    })
 }
 
 
-drop(event: CdkDragDrop<any[]>) {
-  if (event.previousContainer === event.container) {
-    moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-  } else {
-    transferArrayItem(event.previousContainer.data,
-                      event.container.data,
-                      event.previousIndex,
-                      event.currentIndex);
-  }
-}
+
 }
