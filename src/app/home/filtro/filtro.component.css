@@ -1,0 +1,36 @@
+.filtro-pessoa{
+  border: solid 1px #ccc;
+  width: 340px;
+  height: 40px;
+  margin-left: auto;
+  margin-bottom: 15px;
+  border-radius: 4px;
+}
+.filtro-categoria{
+  border: solid 1px #ccc;
+  width: 340px;
+  height: 40px;
+  margin-left: auto;
+  margin-bottom: -50px;
+  border-radius: 4px;
+}
+input[type="text" i] {
+  padding: 1px 2px;
+  border: none;
+  box-shadow: none;
+  outline: none;
+  margin-left: 9px;
+  height: 17px;
+
+}
+label {
+  cursor: text;
+  margin: 0;
+  display: block;
+  opacity: 1;
+  margin-left: 9px;
+}
+
+.filtros{
+  margin-right: 5px;
+}
