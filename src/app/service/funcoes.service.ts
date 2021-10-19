@@ -22,9 +22,14 @@ export class FuncoesService {
   atualizaTarefa(cards: TarefaModule): Observable<TarefaModule> {
     return this.http.put<TarefaModule>(`${this.TarefasApiUrl}/${cards.id}`,cards);
   }
+  atualizaStatusTarefa(cards: object,id:number): Observable<TarefaModule> {
+    return this.http.put<TarefaModule>(`${this.TarefasApiUrl}/${id}`,cards);
+  }
 
   deletaTarefa(id: number): Observable<TarefaModule> {
     return this.http.delete<TarefaModule>(`${this.TarefasApiUrl}/${id}`);
   }
+
+  
 }
 

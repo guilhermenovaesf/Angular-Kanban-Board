@@ -1,12 +1,14 @@
 .filtro-pessoa{
+  margin-bottom: -45px;
   border: solid 1px #ccc;
-  width: 340px;
   height: 40px;
-  margin-left: auto;
-  margin-bottom: 15px;
   border-radius: 4px;
+  margin-inline: auto;
+  width: 339px;
+
 }
 .filtro-categoria{
+  margin-right: 100px;
   border: solid 1px #ccc;
   width: 340px;
   height: 40px;

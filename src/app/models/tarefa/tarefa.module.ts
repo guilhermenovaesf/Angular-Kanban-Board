@@ -8,12 +8,16 @@ export class TarefaModule {
     public titulo: string,
     public pessoa: string,
     public conteudo: string,
-    public prazo: Date
+    public prazo: Date,
+    public status:string,
+    public show:boolean
   ) {
     this.id = id;
     this.titulo = titulo;
-    this.pessoa=pessoa
+    this.pessoa=pessoa;
     this.conteudo = conteudo;
     this.prazo = prazo;
+    this.status =status
+    this.show=true;
   }
 }

@@ -1,18 +1,23 @@
-<div class="filtros">
+
   <div class="filtro-pessoa">
     <label>Pessoa</label>
     <input
       type="text"
-      placeholder="Busca por pessoa"
-      (ngModelChange)="changeTextTrail($event)"
+      placeholder="{{ 'Busca por pessoa' }}"
+      (ngModelChange)=" getDigitoTeclado($event)"
       [(ngModel)]="searchQuery"
       [ngModelOptions]="{ standalone: true }"
-      minlenght="3"
+      minlength="3"
     />
+    <!-- nao ta pegando o minlength -->
   </div>
 
   <div class="filtro-categoria">
     <label>Categoria</label>
-    <input type="text" placeholder="Busca por categoria" />
+    <input type="text" placeholder="Busca por categoria"
+    (ngModelChange)=" getDigitoTecladoCategoria($event)"
+    [(ngModel)]="searchCategory"
+    [ngModelOptions]="{ standalone: true }"
+    minlength="3"/>
   </div>
-</div>
+

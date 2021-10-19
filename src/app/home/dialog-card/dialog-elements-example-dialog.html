@@ -1,7 +1,7 @@
 <h1 mat-dialog-title>{{card.titulo}}</h1>
 <div mat-dialog-content>{{card.pessoa}}</div>
 <div mat-dialog-content>{{card.conteudo}}</div>
-<div mat-dialog-content>{{card.prazo}}</div>
+<div mat-dialog-content>{{card.prazo|date}}</div>
 <div mat-dialog-actions>
  <button mat-button mat-dialog-close (click)="onCancel()">Close</button>
 </div>
